@@ -7,8 +7,8 @@
 
 # testing
 /coverage
-.env
-credentials2.json
+setupTests.js
+testConnection.js
 
 # production
 /build
@@ -27,3 +27,4 @@ yarn-error.log*
 #keys/passwords
 .env
 credentials2.json
+settings.json
