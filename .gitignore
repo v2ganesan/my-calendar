@@ -28,3 +28,4 @@ yarn-error.log*
 .env
 credentials2.json
 settings.json
+.vscode/
