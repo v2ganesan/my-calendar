@@ -40,8 +40,9 @@ export default function LoginPage() {
 
   return (
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
-      <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <div style={{ textAlign: "rght", marginTop: "50px" }}>
         <h1>Welcome to Calend-Ez!</h1>
+      <h1>Sign Up</h1>
         <GoogleLogin
           onSuccess={handleSuccess}
           onError={handleFailure}
