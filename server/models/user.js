@@ -20,8 +20,12 @@ const User = sequelize.define('info', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  meeting_avail: {
-    type: DataTypes.RANGE(DataTypes.DATE),
+  start_time: {
+    type: DataTypes.TIME,
+    allowNull: false
+  },
+  end_time: {
+    type: DataTypes.TIME,
     allowNull: false
   },
   meeting_duration: {

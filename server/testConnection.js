@@ -1,4 +1,4 @@
-const { Pool } = require('pg');
+ 
 require('dotenv').config();
 
 // Log the connection details (remove in production)

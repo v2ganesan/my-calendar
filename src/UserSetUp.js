@@ -10,22 +10,21 @@ export default function UserSetUp() {
     name: name || '',
     email: email || '',
     purpose: '',
-    meeting_avail: {
-      start: '',
-      end: ''
-    },
+    start_time: '',
+    end_time: '',
     meeting_duration: '01:00:00', // Default 1 hour in interval format
-    meeting_location: ''
+    meeting_location: '',
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("handlesubmit triggered")
     try {
-      // Format the meeting_avail as a PostgreSQL tsrange
-      const formattedData = {
-        ...formData,
-        meeting_avail: `[${formData.meeting_avail.start},${formData.meeting_avail.end}]`
-      };
+        // Prepare the data for submission
+        const formattedData = {
+          ...formData,
+    };
+    console.log('Submitting data:', formattedData);
 
       const response = await fetch('/api/users', {
         method: 'POST',
@@ -97,27 +96,21 @@ export default function UserSetUp() {
           <label>Meeting Availability:</label>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             <input
-              type="datetime-local"
-              value={formData.meeting_avail.start}
+              type="time"
+              value={formData.start_time}
               onChange={(e) => setFormData({
                 ...formData,
-                meeting_avail: {
-                  ...formData.meeting_avail,
-                  start: e.target.value
-                }
+                start_time: e.target.value
               })}
               required
             />
             <span>to</span>
             <input
-              type="datetime-local"
-              value={formData.meeting_avail.end}
+              type="time"
+              value={formData.end_time}
               onChange={(e) => setFormData({
                 ...formData,
-                meeting_avail: {
-                  ...formData.meeting_avail,
-                  end: e.target.value
-                }
+                end_time: e.target.value
               })}
               required
             />
@@ -155,7 +148,9 @@ export default function UserSetUp() {
           />
         </div>
 
-        <button type="submit" style={{ marginTop: '20px' }}>
+        <button type="submit"   
+                onClick={() => console.log("Submit button clicked")}
+                style={{ marginTop: '20px' }}>
           Save Profile
         </button>
       </form>

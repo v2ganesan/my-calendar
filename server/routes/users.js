@@ -31,7 +31,8 @@ router.post('/', async (req, res) => {
       name,
       email,
       purpose,
-      meeting_avail,
+      start_time, 
+      end_time,
       meeting_duration,
       meeting_location
     } = req.body;
@@ -41,7 +42,8 @@ router.post('/', async (req, res) => {
       name,
       email,
       purpose,
-      meeting_avail,  // This should be in tsrange format: [starttime,endtime]
+      start_time, // two separate variables for the time range 
+      end_time,  
       meeting_duration, // This should be in interval format: HH:MM:SS
       meeting_location
     });
