@@ -17,10 +17,10 @@ sequelize
   .then(() => {
     console.log('Connection established successfully.');
     // Test query to verify table access
-    return sequelize.query('SELECT * FROM "public"."info" LIMIT 1');
+    return sequelize.query('SELECT * FROM "public"."users" LIMIT 1');
   })
   .then(result => {
-    console.log('Successfully queried info table:', result);
+    console.log('Successfully queried users table:', result);
   })
   .catch(err => {
     console.error('Unable to connect to the database or query table:', err);

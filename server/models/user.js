@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize(process.env.DATABASE_URL);
 
-const User = sequelize.define('info', {
+const User = sequelize.define('users', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -15,30 +15,10 @@ const User = sequelize.define('info', {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true
-  },
-  purpose: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  start_time: {
-    type: DataTypes.TIME,
-    allowNull: false
-  },
-  end_time: {
-    type: DataTypes.TIME,
-    allowNull: false
-  },
-  meeting_duration: {
-    type: DataTypes.TIME,
-    allowNull: false
-  },
-  meeting_location: {
-    type: DataTypes.TEXT,
-    allowNull: false
   }
 }, {
-  freezeTableName: true,
-  timestamps: false,
+  freezeTableName: true, // Ensures the table name matches the model name exactly
+  timestamps: false,     
 });
 
-module.exports = User; 
+module.exports = User;

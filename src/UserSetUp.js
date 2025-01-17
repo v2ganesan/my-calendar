@@ -6,15 +6,46 @@ export default function UserSetUp() {
   const location = useLocation();
   const { email, name } = location.state || {};
 
+  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
   const [formData, setFormData] = useState({
     name: name || '',
     email: email || '',
     purpose: '',
-    start_time: '',
-    end_time: '',
+    availability: daysOfWeek.reduce((acc, day) => {
+        acc[day] = { start_time: '', end_time: '', isAvailable: true};
+        return acc;
+      }, {}), 
     meeting_duration: '01:00:00', // Default 1 hour in interval format
     meeting_location: '',
   });
+
+  const handleTimeChange = (day, key, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      availability: {
+        ...prevData.availability,
+        [day]: {
+          ...prevData.availability[day],
+          [key]: value,
+        },
+      },
+    }));
+  };
+
+  const handleAvailabilityToggle = (day) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      availability: {
+        ...prevData.availability,
+        [day]: {
+          ...prevData.availability[day],
+          isAvailable: !prevData.availability[day].isAvailable,
+        },
+      },
+    }));
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -92,30 +123,48 @@ export default function UserSetUp() {
           </select>
         </div>
 
-        <div className="form-group">
-          <label>Meeting Availability:</label>
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <input
-              type="time"
-              value={formData.start_time}
-              onChange={(e) => setFormData({
-                ...formData,
-                start_time: e.target.value
-              })}
-              required
-            />
-            <span>to</span>
-            <input
-              type="time"
-              value={formData.end_time}
-              onChange={(e) => setFormData({
-                ...formData,
-                end_time: e.target.value
-              })}
-              required
-            />
+
+        <h3>Weekly Availability</h3>
+        {daysOfWeek.map((day) => (
+          <div key={day} className="form-group">
+            <label>{day}:</label>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              {formData.availability[day].isAvailable ? (
+                <>
+                  <input
+                    type="time"
+                    value={formData.availability[day].start_time}
+                    onChange={(e) => handleTimeChange(day, 'start_time', e.target.value)}
+                    required
+                  />
+                  <span>to</span>
+                  <input
+                    type="time"
+                    value={formData.availability[day].end_time}
+                    onChange={(e) => handleTimeChange(day, 'end_time', e.target.value)}
+                    required
+                  />
+                </>
+              ) : (
+                <span style={{ fontStyle: 'italic', color: 'gray' }}>Unavailable</span>
+              )}
+              <button
+                type="button"
+                onClick={() => handleAvailabilityToggle(day)}
+                style={{
+                  backgroundColor: 'red',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '5px',
+                  padding: '5px 10px',
+                  cursor: 'pointer',
+                }}
+              >
+                {formData.availability[day].isAvailable ? 'X' : '+'}
+              </button>
+            </div>
           </div>
-        </div>
+        ))}
 
         <div className="form-group">
           <label>Meeting Duration:</label>
