@@ -1,0 +1,85 @@
+/* sidebar */
+
+.sidebar {
+    width: 250px;
+    background-color: #f7f8fa;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+  }
+  
+  .sidebar h2 {
+    margin: 0 0 20px;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar ul li {
+    padding: 10px 0;
+    cursor: pointer;
+  }
+  
+  .sidebar ul li.active {
+    background-color: #ddd;
+    border-radius: 5px;
+  }
+
+/* eventCard */
+
+
+  .event-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 300px;
+    padding: 15px;
+    margin-top: 20px;
+  }
+  
+  .event-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .event-card-header .event-title {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .event-card-body {
+    margin-top: 10px;
+  }
+  
+  .event-card-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .copy-link, .share-button {
+    background-color: #ddd;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .copy-link:hover, .share-button:hover {
+    background-color: #ccc;
+  }
+
+/* dashboard */
+
+  .dashboard {
+    display: flex;
+  }
+  
+  .main-content {
+    padding: 20px;
+    flex: 1;
+  }

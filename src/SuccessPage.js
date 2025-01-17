@@ -1,12 +1,17 @@
-import React from "react";
+import React from 'react';
+import Sidebar from './dashboardComponents/Sidebar';
+import EventCard from './dashboardComponents/EventCard';
+import './dashboardComponents/dashboard.css';
 
-
-
-export default function SuccessPage() {
+export default function EventsPage() {
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Success</h1>
-      <p>You Have successfully logged in!</p>
+    <div className="dashboard">
+      <Sidebar />
+      <main className="main-content">
+        <h1>Event types</h1>
+        <EventCard />
+        <EventCard /> {/* Add more placeholders if needed */}
+      </main>
     </div>
   );
 }
