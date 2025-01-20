@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const Event = require('../models/events')
-const MeetingAvailability = require('../models/meetingAvailability')
+const MeetingAvailability = require('../models/meetingAvailability');
+const { Events } = require('pg');
 
 // Check if user exists
 router.get('/check', async (req, res) => {
@@ -15,7 +16,7 @@ router.get('/check', async (req, res) => {
   
       // Explicitly check if user is null
       const isNewUser = user === null;
-      console.log('Is new user?:', isNewUser); // Debug log 3
+      console.log('Is new user:', isNewUser); // Debug log 3
   
       res.json({ isNewUser });
     } catch (error) {
@@ -23,6 +24,27 @@ router.get('/check', async (req, res) => {
       res.status(500).json({ error: 'Server error' });
     }
   });
+
+// Get event data from postgres 
+router.get('/events', async (req, res) => {
+    try {
+        // get email
+        const {email} = req.query;
+        console.log('user email: ', email)
+        
+        // get corresponding id 
+        const userId = await User.findOne({
+            where: {email},
+            attributes: ['id'],
+        });
+
+        console.log('user id ', userId )
+        
+        //retrieve all event info 
+        const event = await Events.findAll({ where : {userId} })
+
+    }
+});
 // Create new user
 router.post('/', async (req, res) => {
     try {
@@ -98,5 +120,4 @@ router.post('/', async (req, res) => {
     }
   });
   
-
 module.exports = router; 
