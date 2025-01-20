@@ -13,8 +13,9 @@ export default function LoginPage() {
       const { email, name, picture } = decoded;
 
       console.log("Checking user:", email);
+      console.log(picture)
 
-      const response = await fetch(`http://localhost:3001/api/users/check?email=${email}`);
+      const response = await fetch(`/api/users/check?email=${email}`);
       const data = await response.json();
 
       console.log("Server response:", data);

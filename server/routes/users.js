@@ -5,18 +5,18 @@ const Event = require('../models/events')
 const MeetingAvailability = require('../models/meetingAvailability');
 const { Events } = require('pg');
 
-// Check if user exists
+// check if user exists
 router.get('/check', async (req, res) => {
     try {
       const { email } = req.query;
-      console.log('Checking email:', email); // Debug log 1
+      console.log('Checking email:', email); 
   
       const user = await User.findOne({ where: { email } });
-      console.log('Database response:', user); // Debug log 2
+      console.log('Database response:', user); 
   
-      // Explicitly check if user is null
+      // check if user is null
       const isNewUser = user === null;
-      console.log('Is new user:', isNewUser); // Debug log 3
+      console.log('Is new user:', isNewUser); 
   
       res.json({ isNewUser });
     } catch (error) {
@@ -33,16 +33,34 @@ router.get('/events', async (req, res) => {
         console.log('user email: ', email)
         
         // get corresponding id 
-        const userId = await User.findOne({
+        const user = await User.findOne({
             where: {email},
             attributes: ['id'],
+            raw: true,
+        });
+        console.log('user id is', user);
+
+        const user_id = user.id
+
+        console.log('user id is', user_id);
+        
+        // retrieve all event info 
+        const events = await Event.findAll({ where : {user_id} });
+        const eventCards = [];
+        console.log(events)
+        events.forEach((event) => {
+            eventCards.push({
+                title: event.title,
+                duration: event.duration,
+                location: event.location
+            });
         });
 
-        console.log('user id ', userId )
-        
-        //retrieve all event info 
-        const event = await Events.findAll({ where : {userId} })
+        // send all events in a json as response
+        res.json(eventCards);
 
+    } catch (error) {
+        console.error(error)
     }
 });
 // Create new user

@@ -10,7 +10,7 @@ export default function Header({ name, profilePicture }) {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        // Redirect to login page
+        // go back to the home page 
         googleLogout();
         navigate("/", { state: null });
       };
