@@ -8,9 +8,9 @@ export default function LoginPage() {
 
   const handleSuccess = async (credentialResponse) => {
     try {
-      // Use jwtDecode to 
+      // Use jwtDecode to get the user's info 
       const decoded = jwtDecode(credentialResponse.credential);
-      const { email, name } = decoded;
+      const { email, name, picture } = decoded;
 
       console.log("Checking user:", email);
 
@@ -18,7 +18,7 @@ export default function LoginPage() {
       const data = await response.json();
 
       console.log("Server response:", data);
-
+      console.log(picture)
       if (data.isNewUser) {
         navigate('/setup', { 
           state: { 
@@ -27,7 +27,13 @@ export default function LoginPage() {
           } 
         });
       } else {
-        navigate('/success');
+        navigate('/success', {
+          state: {
+            email,
+            name, 
+            picture
+          }
+        });
       }
     } catch (error) {
       console.error('Error during login:', error);
