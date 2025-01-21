@@ -4,6 +4,9 @@ import Sidebar from './dashboardComponents/Sidebar';
 import EventCard from './dashboardComponents/EventCard';
 import Header from './dashboardComponents/Header'
 import './dashboardComponents/dashboard.css';
+import './createEventComponents/NewEventForm.css'
+import EventForm from './createEventComponents/EventForm';
+import CreateEventButton from './createEventComponents/CreateEventButton'
 import { googleLogout } from '@react-oauth/google';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -11,8 +14,14 @@ import { useNavigate, useLocation } from 'react-router-dom';
 export default function EventsPage() {
   const location = useLocation();
   const { email, name , picture } = location.state || {};
-
+  
   const [events, setEvents] = useState([]);
+
+  const [isFormVisible, setFormVisible] = useState(false);
+
+  const toggleForm = () => {
+    setFormVisible(!isFormVisible);
+  };
 
   useEffect(() => {
     async function fetchEvents() {
@@ -35,6 +44,10 @@ export default function EventsPage() {
         <Sidebar />
         <main className="main-content">
           <h1>Event types</h1>
+          
+          <CreateEventButton onClick={toggleForm} />
+          <EventForm isFormVisible={isFormVisible} />
+          
           {events.map((event, index) => (
               <EventCard
                 key={index}

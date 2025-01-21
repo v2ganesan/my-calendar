@@ -1,0 +1,40 @@
+.event-form-container {
+    position: fixed;
+    right: -440px; /* Initially hidden */
+    top: 0;
+    height: 100%;
+    width: 400px;
+    background-color: #f4f4f4;
+    box-shadow: -5px 0 10px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease-in-out;
+    padding: 20px;
+  }
+  
+  .event-form-container.slide-in {
+    right: 0; /* Slide in */
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  form input {
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+  }
+  
+  form button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  form button:hover {
+    background-color: #45a049;
+  }
+  
