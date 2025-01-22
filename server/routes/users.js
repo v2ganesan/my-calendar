@@ -25,44 +25,7 @@ router.get('/check', async (req, res) => {
     }
   });
 
-// Get event data from postgres 
-router.get('/events', async (req, res) => {
-    try {
-        // get email
-        const {email} = req.query;
-        console.log('user email: ', email)
-        
-        // get corresponding id 
-        const user = await User.findOne({
-            where: {email},
-            attributes: ['id'],
-            raw: true,
-        });
-        console.log('user id is', user);
 
-        const user_id = user.id
-
-        console.log('user id is', user_id);
-        
-        // retrieve all event info 
-        const events = await Event.findAll({ where : {user_id} });
-        const eventCards = [];
-        console.log(events)
-        events.forEach((event) => {
-            eventCards.push({
-                title: event.title,
-                duration: event.duration,
-                location: event.location
-            });
-        });
-
-        // send all events in a json as response
-        res.json(eventCards);
-
-    } catch (error) {
-        console.error(error)
-    }
-});
 // Create new user
 router.post('/', async (req, res) => {
     try {
@@ -89,8 +52,6 @@ router.post('/', async (req, res) => {
   
         console.log('New user created:', newUser);
 
-        
-
         // Insert availability rows for the user
 
         const availabilities = Object.entries(availability)
@@ -106,7 +67,7 @@ router.post('/', async (req, res) => {
           console.log('Availability records created:', availabilities);
         
   
-        // Create an event for the user
+        // Create user's first event 
         const newEvent = await Event.create({
           user_id: newUser.id,
           duration: meeting_duration,

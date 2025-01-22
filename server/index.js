@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const sequelize = require('./config/database');
 const userRoutes = require('./routes/users');
+const eventRoutes = require('./routes/eventOps')
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/users', userRoutes);
+app.use('/api/eventOps', eventRoutes)
 
 // Database connection test
 sequelize

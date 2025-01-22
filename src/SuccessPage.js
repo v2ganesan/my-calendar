@@ -27,7 +27,7 @@ export default function EventsPage() {
     async function fetchEvents() {
       try {
         // backend route to fetch events
-        const response = await fetch(`/api/users/events?email=${email}`);
+        const response = await fetch(`/api/eventOps/events?email=${email}`);
         const data = await response.json();
         setEvents(data); // store event data in state
       } catch (error) {
@@ -47,7 +47,7 @@ export default function EventsPage() {
           
           <CreateEventButton onClick={toggleForm} />
           <EventForm isFormVisible={isFormVisible} />
-          
+
           {events.map((event, index) => (
               <EventCard
                 key={index}
