@@ -52,9 +52,11 @@ export default function EventsPage() {
           {events.map((event, index) => (
               <EventCard
                 key={index}
+                id={event.id}
                 title={event.title}
                 duration={event.duration.hours}
                 location={event.location}
+                fetchEvents={fetchEvents}
               />
             ))}
         </main>

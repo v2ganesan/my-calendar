@@ -25,14 +25,16 @@ router.get('/events', async (req, res) => {
         // retrieve all event info 
         const events = await Event.findAll({ where : {user_id} });
         const eventCards = [];
-        console.log(events)
+        
         events.forEach((event) => {
             eventCards.push({
+                id: event.id,
                 title: event.title,
                 duration: event.duration,
                 location: event.location
             });
         });
+        console.log(eventCards)
 
         // send all events in a json as response
         res.json(eventCards);
@@ -83,5 +85,25 @@ router.post('/newEvent', async (req, res) => {
     }
 });
 
-
+router.delete('/deleteEvent/:id', async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      // Delete the event by its ID using Sequelize
+      const result = await Event.destroy({
+        where: {
+          id: id
+        }
+      });
+  
+      if (result === 1) { // Sequelize returns 1 if one row was deleted
+        res.status(200).json({ message: 'Event deleted successfully' });
+      } else {
+        res.status(404).json({ message: 'Event not found' });
+      }
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      res.status(500).json({ message: 'Error deleting event' });
+    }
+  });
 module.exports = router; 
