@@ -1,7 +1,17 @@
 import React from 'react';
 import './dashboard.css';
+import { useState, useEffect } from 'react';
+import UpdateEventForm from '../updateEvents/UpdateEventForm';
+
 
 export default function EventCard({id, title, duration, location, fetchEvents}) {
+
+    const [showForm, setShowForm] = useState(false);
+
+    const showUpdateForm = () => {
+      setShowForm(!showForm)
+    };
+
     const handleDelete = async () => {
       try {
         const response = await fetch(`/api/eventOps/deleteEvent/${id}`, {
@@ -24,7 +34,15 @@ export default function EventCard({id, title, duration, location, fetchEvents}) 
     return (
       <div className="event-card">
         <div className="event-card-header">
-          <input type="checkbox" />
+          <button className="update-button" onClick={showUpdateForm} > Update </button>
+          <UpdateEventForm 
+            showForm={showForm} 
+            id={id} 
+            showUpdateForm={showUpdateForm} 
+            fetchEvents={fetchEvents} 
+            title={title}
+            duration={duration}
+            location={location} />
           <span className="event-title">{title}</span>
           <button 
           className="delete-button" 

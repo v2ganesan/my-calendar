@@ -106,4 +106,28 @@ router.delete('/deleteEvent/:id', async (req, res) => {
       res.status(500).json({ message: 'Error deleting event' });
     }
   });
+
+router.put('/updateEvent/:id', async (req, res) => {
+    const { id, title, location, duration } = req.body; // Get the updated data from the request body
+  
+    try {
+      // Update the event by its ID
+      const result = await Event.update(
+        { title, location, duration }, // Fields to update
+        {
+          where: { id: id }, // Condition to find the event by ID
+        }
+      );
+  
+      if (result[0] === 1) { // Sequelize returns an array; result[0] indicates the number of rows updated
+        res.status(200).json({ message: 'Event updated successfully' });
+      } else {
+        res.status(404).json({ message: 'Event not found or no changes made' });
+      }
+    } catch (error) {
+      console.error('Error updating event:', error);
+      res.status(500).json({ message: 'Error updating event' });
+    }
+  });
+
 module.exports = router; 

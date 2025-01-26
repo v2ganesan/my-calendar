@@ -103,7 +103,7 @@
   .copy-link:hover, .share-button:hover {
     background-color: #ccc;
   }
-  
+
   /* Delete Button */
   .delete-button {
     position: absolute;
@@ -115,6 +115,15 @@
     border-radius: 50%;
     padding: 5px 10px;
     cursor: pointer;
+  }
+
+  .update-button {
+    background: '#4caf50';
+    color: 'white';
+    border: 'none';
+    borderRadius: '5px';
+    padding: '5px 10px';
+    cursor: 'pointer';
   }
 
 
