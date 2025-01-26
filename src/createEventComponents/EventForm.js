@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './NewEventForm.css';
 
-const EventForm = ({ isFormVisible, email }) => {
+const EventForm = ({ isFormVisible, email, toggleForm}) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
     duration: '1:00:00',
     location: '',
   });
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,7 +36,8 @@ const EventForm = ({ isFormVisible, email }) => {
 
       if (eventResponse.ok) {
         alert('Event created successfully!');
-        setFormData({ eventName: '', eventLocation: '', eventDuration: '' }); // Reset the form
+        setFormData({ eventName: '', eventLocation: '', eventDuration: '1:00:00' }); // reset form
+        toggleForm();
       } else {
         throw new Error('Failed to create event');
       }

@@ -14,15 +14,15 @@ import { useNavigate, useLocation } from 'react-router-dom';
 export default function EventsPage() {
   const location = useLocation();
   const { email, name , picture } = location.state || {};
-  
   const [events, setEvents] = useState([]);
 
   const [isFormVisible, setFormVisible] = useState(false);
 
+
   const toggleForm = () => {
     setFormVisible(!isFormVisible);
   };
-
+  
   useEffect(() => {
     async function fetchEvents() {
       try {
@@ -46,7 +46,7 @@ export default function EventsPage() {
           <h1>Event types</h1>
           
           <CreateEventButton onClick={toggleForm} />
-          <EventForm isFormVisible={isFormVisible} email={email}/>
+          <EventForm isFormVisible={isFormVisible} email={email} toggleForm={toggleForm}/>
 
           {events.map((event, index) => (
               <EventCard
