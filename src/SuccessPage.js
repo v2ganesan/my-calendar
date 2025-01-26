@@ -23,19 +23,20 @@ export default function EventsPage() {
     setFormVisible(!isFormVisible);
   };
   
-  useEffect(() => {
-    async function fetchEvents() {
-      try {
-        // backend route to fetch events
-        const response = await fetch(`/api/eventOps/events?email=${email}`);
-        const data = await response.json();
-        setEvents(data); // store event data in state
-      } catch (error) {
-        console.error('Error fetching events:', error);
-      }
+  const fetchEvents = async () => {
+    try {
+      const response = await fetch(`/api/eventOps/events?email=${email}`);
+      const data = await response.json();
+      setEvents(data); // store event data in state
+    } catch (error) {
+      console.error('Error fetching events:', error);
     }
+  };
+
+  // Fetch events on mount and whenever email changes
+  useEffect(() => {
     fetchEvents();
-  }, [email]); // re-fetch when email changes 
+  }, [email]);
 
   return (
     <div className="dashboard">
@@ -46,7 +47,7 @@ export default function EventsPage() {
           <h1>Event types</h1>
           
           <CreateEventButton onClick={toggleForm} />
-          <EventForm isFormVisible={isFormVisible} email={email} toggleForm={toggleForm}/>
+          <EventForm isFormVisible={isFormVisible} email={email} toggleForm={toggleForm} fetchEvents={fetchEvents}/>
 
           {events.map((event, index) => (
               <EventCard
