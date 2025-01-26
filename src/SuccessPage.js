@@ -46,7 +46,7 @@ export default function EventsPage() {
           <h1>Event types</h1>
           
           <CreateEventButton onClick={toggleForm} />
-          <EventForm isFormVisible={isFormVisible} />
+          <EventForm isFormVisible={isFormVisible} email={email}/>
 
           {events.map((event, index) => (
               <EventCard

@@ -44,37 +44,44 @@ router.get('/events', async (req, res) => {
 
 router.post('/newEvent', async (req, res) => {
     try {
-        
-        // new event form data
+        // Destructure new event form data from the request body
         const {
             email,
             title,
             duration,
             location
-        } = req.body ;
+        } = req.body;
 
-        // get corresponding id 
+        // Fetch the user ID corresponding to the provided email
         const user = await User.findOne({
-            where: {email},
+            where: { email },
             attributes: ['id'],
             raw: true,
-        });        
+        });
 
-        const user_id = user.id
-        console.log('user id is', user_id);
+        // Check if the user was found
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
 
-        try {
-            // create new event in db 
-            const newEvent = await Event.create({
-                user_id,
-                title,
-                duration,
-                location
-            })
-            console.log("new event created")
-        } catch(error)
+        const user_id = user.id;
+        console.log('User ID is', user_id);
 
-    } catch(error)
+        // Create a new event in the database
+        const newEvent = await Event.create({
+            user_id,
+            title,
+            duration,
+            location,
+        });
+
+        console.log('New event created:', newEvent);
+        return res.status(201).json({ message: 'Event created successfully', event: newEvent });
+    } catch (error) {
+        console.error('Error in creating new event:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
+
 
 module.exports = router; 
