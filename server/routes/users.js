@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
+const User = require('../models/User');
 const Event = require('../models/events')
 const MeetingAvailability = require('../models/meetingAvailability');
 const { Events } = require('pg');

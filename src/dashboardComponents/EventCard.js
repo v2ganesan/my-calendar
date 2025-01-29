@@ -1,12 +1,13 @@
 import React from 'react';
 import './dashboard.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import UpdateEventForm from '../updateEvents/UpdateEventForm';
 
 
-export default function EventCard({id, title, duration, location, fetchEvents}) {
+export default function EventCard({email, id, title, duration, location, fetchEvents}) {
 
     const [showForm, setShowForm] = useState(false);
+    const [link, setLink] = useState('');
 
     const showUpdateForm = () => {
       setShowForm(!showForm)
@@ -19,8 +20,8 @@ export default function EventCard({id, title, duration, location, fetchEvents}) 
         });
 
         if (response.ok) {
-          //onDelete(id);
           //refetch events, will fix to update state instead of making funct call later
+          console.log("EVENT DELETED")
           fetchEvents();
         } else {
           throw new Error('Failed to delete event');
@@ -30,6 +31,22 @@ export default function EventCard({id, title, duration, location, fetchEvents}) 
         alert('There was an error deleting the event. Please try again.');
       }
     };
+
+    const handleFetchLink = useCallback(async () => { // memoize the function so i dont have to re-render this link 
+      try {
+        const result = await fetch(`/api/apptOps/getLink?email=${email}&id=${id}`);
+        const data = await result.json();
+        setLink(data.link);
+      } catch (error) {
+        console.error('Error fetching link:', error);
+      }
+    }, [email, id]); // 
+    
+    useEffect(() => {
+      handleFetchLink();
+      console.log('fetched')
+    }, [handleFetchLink]); // Now properly included in dependencies
+    
 
     return (
       <div className="event-card">
@@ -53,7 +70,7 @@ export default function EventCard({id, title, duration, location, fetchEvents}) 
         </div>
         <div className="event-card-body">
           <p><strong>{duration}</strong>, {location}</p>
-          <a href="#" className="booking-page-link">View booking page</a>
+          <a href={link} className="booking-page-link">View booking page</a>
         </div>
         <div className="event-card-footer">
           <button className="copy-link">Copy link</button>
