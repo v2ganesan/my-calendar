@@ -20,11 +20,10 @@ const SignUp = () => {
       alert("Passwords do not match!");
       return;
     }
-
+    localStorage.setItem("email", email);
+    localStorage.setItem("name", name);
     // Navigate to setup page with form data
-    navigate("/setup", {
-      state: { name, email },
-    });
+    navigate("/setup");
   };
 
   return (

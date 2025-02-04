@@ -4,6 +4,7 @@ import LoginPage from "./LoginPage";
 import UserSetUp from "./UserSetUp.js";
 import SuccessPage from "./SuccessPage";
 import SignUp from "./SignUp.js";
+import BookingPage from "./bookingPage/BookingPage";
 
 
 
@@ -15,6 +16,7 @@ export default function Profile() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/setup" element={<UserSetUp />} />
         <Route path="/success" element={<SuccessPage />} />
+        <Route path="/booking/:username/:id" element={<BookingPage />} />
       </Routes>
     </Router>
   );

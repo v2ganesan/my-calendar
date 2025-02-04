@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function UserSetUp() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { email, name } = location.state || {};
+  //const location = useLocation();
+  const queryParams = new URLSearchParams(window.location.search);
+  const email = queryParams.get("email");
+  const name = queryParams.get("name");
+
+  //const picture = queryParams.get("picture");
+  //const email = localStorage.getItem("email");
+  //const name = localStorage.getItem("name");
 
   const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 

@@ -23,5 +23,10 @@ router.get('/getLink', async (req, res) => {
     }
 });
 
+router.get('/availableSlots', async (req, res ) =>{
+    //fetch the start and end time of the user id 
+    
+    
+})
 
 module.exports = router;
