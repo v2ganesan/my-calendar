@@ -43,10 +43,10 @@ router.get('/availableSlots/:userId/:date/:eventId', async (req, res ) =>{
             return res.status(404).json({message: 'No availability found for ', date});
         }
         //select start_time, end_time from availability where id = userId
-        console.log('avail', availability);
+        //console.log('avail', availability);
         const start = availability.start_time;
         const end = availability.end_time;
-        console.log('startTime', start);
+        //console.log('startTime', start);
         // get the meeting duration from the events table
         const eventData = await Event.findOne({
             where: {id: eventId}
@@ -54,9 +54,9 @@ router.get('/availableSlots/:userId/:date/:eventId', async (req, res ) =>{
         const duration = eventData.duration;
         console.log('duration', duration);
 
-        const slots = generatePossibleSlots(start, end , duration);
+        const slots = await generatePossibleSlots(start, end , duration);
         console.log('slots ', slots);
-        const filteredSlots = filterAvailableSlots(userId, date, slots);
+        const filteredSlots = await filterAvailableSlots(userId, date, slots);
 
         console.log(filteredSlots);
         res.json(filteredSlots);
