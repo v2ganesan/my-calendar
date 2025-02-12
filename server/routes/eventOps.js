@@ -5,7 +5,7 @@ const Event = require('../models/events')
 
 // Get event data from postgres 
 router.get('/events', async (req, res) => {
-    try {
+      try {
         // get email
         const {email} = req.query;
         console.log('user email: ', email)
@@ -40,7 +40,8 @@ router.get('/events', async (req, res) => {
         res.json(eventCards);
 
     } catch (error) {
-        console.error(error)
+        console.error('error', error);
+        res.status(500).send();
     }
 });
 
@@ -129,5 +130,28 @@ router.put('/updateEvent/:id', async (req, res) => {
       res.status(500).json({ message: 'Error updating event' });
     }
   });
+
+// Get event name by ID
+router.get('/eventName/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const event = await Event.findOne({
+            where: { id },
+            attributes: ['title'],
+            raw: true,
+        });
+        console.log('found event')
+
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+
+        console.log('name', event.title);
+        res.json({ title: event.title });
+    } catch (error) {
+        console.error('Error fetching event name:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
 
 module.exports = router; 
