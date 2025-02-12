@@ -10,7 +10,7 @@ const MeetingAvailability = require('../models/meetingAvailability');
 router.get('/getLink', async (req, res) => {
     // passed in the email / eventId
     try{
-        const { email, id } = req.params;
+        const { email, id } = req.query;
         console.log("email: ", email, " eventId: ", id);
         const username = email.replace("@gmail.com", ""); // remove the @gmail.com from the email 
 
@@ -24,45 +24,60 @@ router.get('/getLink', async (req, res) => {
     }
 });
 
-router.get('/availableSlots/:userId/:date/:eventId', async (req, res ) =>{
-    //fetch the start and end time of the user id 
-    try{
-        const { userId, date, eventId } = req.params;
-        // find out what day of the week the date is 
+router.get('/availableSlots/:email/:date/:eventId', async (req, res) => {
+    try {
+        const { email, date, eventId } = req.params;
+        console.log('email: ', email, ' date: ', date, ' eventId: ', eventId);
+        // Fetch the user ID using the email
+        const user = await User.findOne({
+            where: { email },
+            attributes: ['id'],
+            raw: true,
+        });
 
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const userId = user.id;
+
+        // Determine the day of the week
         const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const dateObj = new Date(date);
         const dayOfWeek = daysOfWeek[dateObj.getDay()];
         console.log('Checking availability for ', dayOfWeek, ', ', date);
 
-        // get availability for that date 
+        // Get availability for that date
         const availability = await MeetingAvailability.findOne({
-            where: {user_id: userId, day_of_week : dayOfWeek}
+            where: { user_id: userId, day_of_week: dayOfWeek }
         });
-        if (!availability){
-            return res.status(404).json({message: 'No availability found for ', date});
+
+        if (!availability) {
+            console.log('No availability found for ', date);
+            return res.json({ message: 'No availability found for ', date });
         }
-        //select start_time, end_time from availability where id = userId
-        //console.log('avail', availability);
+
         const start = availability.start_time;
         const end = availability.end_time;
-        //console.log('startTime', start);
-        // get the meeting duration from the events table
+
+        // Get the meeting duration from the events table
         const eventData = await Event.findOne({
-            where: {id: eventId}
+            where: { id: eventId }
         });
+
         const duration = eventData.duration;
         console.log('duration', duration);
 
-        const slots = await generatePossibleSlots(start, end , duration);
+        const slots = await generatePossibleSlots(start, end, duration);
         console.log('slots ', slots);
         const filteredSlots = await filterAvailableSlots(userId, date, slots);
 
-        console.log(filteredSlots);
+        //console.log(filteredSlots);
         res.json(filteredSlots);
 
-    } catch (error){
+    } catch (error) {
         console.log('error', error);
+        res.status(500).json({ message: 'Error fetching available slots' });
     }
 });
 
