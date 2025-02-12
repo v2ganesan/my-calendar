@@ -2,6 +2,7 @@ import React from 'react';
 import './dashboard.css';
 import { useState, useEffect, useCallback } from 'react';
 import UpdateEventForm from '../updateEvents/UpdateEventForm';
+import { Link } from 'react-router-dom';
 
 
 export default function EventCard({email, id, title, duration, location, fetchEvents}) {
@@ -36,7 +37,8 @@ export default function EventCard({email, id, title, duration, location, fetchEv
       try {
         const result = await fetch(`/api/apptOps/getLink?email=${email}&id=${id}`);
         const data = await result.json();
-        setLink(data.link);
+        console.log(data)
+        setLink(data);
       } catch (error) {
         console.error('Error fetching link:', error);
       }
@@ -70,7 +72,7 @@ export default function EventCard({email, id, title, duration, location, fetchEv
         </div>
         <div className="event-card-body">
           <p><strong>{duration}</strong>, {location}</p>
-          <a href={link} className="booking-page-link">View booking page</a>
+          <Link to={`/booking/${email}/${id}`} className="booking-page-link">View booking page</Link>
         </div>
         <div className="event-card-footer">
           <button className="copy-link">Copy link</button>
