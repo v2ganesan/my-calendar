@@ -16,7 +16,7 @@ export default function Profile() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/setup" element={<UserSetUp />} />
         <Route path="/success" element={<SuccessPage />} />
-        <Route path="/booking/:username/:id" element={<BookingPage />} />
+        <Route path="/booking/:email/:id" element={<BookingPage />} />
       </Routes>
     </Router>
   );
