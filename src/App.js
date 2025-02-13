@@ -5,8 +5,7 @@ import UserSetUp from "./UserSetUp.js";
 import SuccessPage from "./SuccessPage";
 import SignUp from "./SignUp.js";
 import BookingPage from "./bookingPage/BookingPage";
-
-
+import ConfirmBooking from "./bookingPage/ConfirmBooking";
 
 export default function Profile() {
   return (
@@ -17,6 +16,7 @@ export default function Profile() {
         <Route path="/setup" element={<UserSetUp />} />
         <Route path="/success" element={<SuccessPage />} />
         <Route path="/booking/:email/:id" element={<BookingPage />} />
+        <Route path="/confirmBooking/:email/:id/:date/:slot/:duration" element={<ConfirmBooking />} />
       </Routes>
     </Router>
   );
