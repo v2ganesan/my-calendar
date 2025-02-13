@@ -5,6 +5,7 @@ const { filterAvailableSlots} = require('../utils/slotFilter.js');
 const User = require('../models/User');
 const Event = require('../models/events')
 const MeetingAvailability = require('../models/meetingAvailability');
+const Appointment = require('../models/appointments');
 
 // generate appointment scheduling link  
 router.get('/getLink', async (req, res) => {
@@ -66,18 +67,54 @@ router.get('/availableSlots/:email/:date/:eventId', async (req, res) => {
         });
 
         const duration = eventData.duration;
-        console.log('duration', duration);
+        //console.log('duration', duration);
 
         const slots = await generatePossibleSlots(start, end, duration);
         console.log('slots ', slots);
         const filteredSlots = await filterAvailableSlots(userId, date, slots);
 
-        //console.log(filteredSlots);
+        console.log(filteredSlots);
         res.json(filteredSlots);
 
     } catch (error) {
         console.log('error', error);
         res.status(500).json({ message: 'Error fetching available slots' });
+    }
+});
+
+// Create a new appointment
+router.post('/createAppointment', async (req, res) => {
+    try {
+        const { email, eventId, date, startTime, endTime, attendeeName, attendeeEmail } = req.body;
+
+        // Fetch the user ID using the email
+        const user = await User.findOne({
+            where: { email },
+            attributes: ['id'],
+            raw: true,
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const userId = user.id;
+
+        // Create a new appointment
+        const newAppointment = await Appointment.create({
+            user_id: userId,
+            event_id: eventId,
+            attendee_name: attendeeName,
+            attendee_email: attendeeEmail,
+            date,
+            start_time: startTime,
+            end_time: endTime
+        });
+
+        res.status(201).json({ message: 'Appointment created successfully', appointment: newAppointment });
+    } catch (error) {
+        console.error('Error creating appointment:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 });
 
