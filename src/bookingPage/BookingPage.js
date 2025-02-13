@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar'
 import { useParams } from 'react-router-dom';
 //import { Await } from 'react-router-dom';
-import './BookingPage.css'; // Import the CSS file
+import './bookingPage.css'; // Import the CSS file
 import 'react-calendar/dist/Calendar.css';
 
 export default function BookingCalendar() {
@@ -12,17 +12,20 @@ export default function BookingCalendar() {
     const { email, id } = useParams();
 
     const [eventName, setEventName] = useState('');
+    const [duration, setDuration] = useState(''); // Add state for duration
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [availableSlots, setAvailableSlots] = useState([]);
     const [selectedSlot, setSelectedSlot] = useState(null);
 
-    // Fetch event name
+    // Fetch event name and duration
     useEffect(() => {
         const fetchEventName = async () => {
             try {
                 const response = await fetch(`/api/eventOps/eventName/${id}`);
                 const data = await response.json();
+                //console.log('data', data);
                 setEventName(data.title);
+                setDuration(Number(data.duration)); // Ensure duration is a number
             } catch (error) {
                 console.error('Error fetching event name:', error);
             }
@@ -33,7 +36,7 @@ export default function BookingCalendar() {
     const handleDateChange = (date) => {
         setSelectedDate(date);
     };
-
+    //console.log('duration:', duration)
     //hook to retrieve the available appt slots based on the selected date 
     useEffect(() => {
         const fetchAppts = async () => {
@@ -96,7 +99,7 @@ export default function BookingCalendar() {
                 </div>
             </div>
             {selectedSlot && (
-                <button className="book-button" onClick={() => window.location.href = `/confirmBooking/${email}/${id}/${selectedDate.toISOString().split('T')[0]}/${selectedSlot}`}>
+                <button className="book-button" onClick={() => window.location.href = `/confirmBooking/${email}/${id}/${selectedDate.toISOString().split('T')[0]}/${selectedSlot}/${duration}`}>
                     Book appointment for {selectedSlot}
                 </button>
             )}
