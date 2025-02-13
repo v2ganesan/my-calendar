@@ -117,5 +117,25 @@ router.post('/createAppointment', async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+// check if the slot is already booked before adding it to the db 
+router.get('/checkExisting/:startTime', async (req, res) => {
+    try {
+        const { startTime } = req.params;
+        console.log('startTime', startTime);
+
+        const appt = await Appointment.findOne({
+            where: { start_time: startTime }
+        });
+
+        if (appt) {
+            res.json({ exists: true });
+        } else {
+            res.json({ exists: false });
+        }
+    } catch (error) {
+        console.error('Error checking existing appointment:', error);
+        res.status(500).json({ message: 'Error checking existing appointment' });
+    }
+});
 
 module.exports = router;
