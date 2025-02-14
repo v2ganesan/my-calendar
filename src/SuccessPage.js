@@ -1,14 +1,16 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Sidebar from './dashboardComponents/Sidebar';
-import EventCard from './dashboardComponents/EventCard';
 import Header from './dashboardComponents/Header'
 import './dashboardComponents/dashboard.css';
 import './createEventComponents/NewEventForm.css'
-import EventForm from './createEventComponents/EventForm';
-import CreateEventButton from './createEventComponents/CreateEventButton'
-import { googleLogout } from '@react-oauth/google';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import EventsDashboard from './dashboardComponents/EventsDashboard/EventsDashboard';
+import AppointmentsDashboard from './dashboardComponents/AppointmentsDashboard/ApptsDash';
+
+
+//import { googleLogout } from '@react-oauth/google';
+//import { useNavigate, useLocation } from 'react-router-dom';
 
 
 export default function EventsPage() {
@@ -18,57 +20,27 @@ export default function EventsPage() {
   const name = queryParams.get("name");
   const picture = queryParams.get("picture");
 
+  console.log('email', email);
+  console.log('name', name);
+
   //const name = localStorage.getItem("name");
   //const email = localStorage.getItem("email");
   //const picture = localStorage.getItem("picture");
 
-  const [events, setEvents] = useState([]);
-  const [isFormVisible, setFormVisible] = useState(false);
-
-
-  const toggleForm = () => {
-    setFormVisible(!isFormVisible);
-  };
-  
-  const fetchEvents = async () => {
-    try {
-      const response = await fetch(`/api/eventOps/events?email=${email}`);
-      const data = await response.json();
-      setEvents(data); // store event data in state
-    } catch (error) {
-      console.error('Error fetching events:', error);
-    }
-  };
-
-  // Fetch events on mount and whenever email changes
-  useEffect(() => {
-    fetchEvents();
-  }, [email]);
-
   return (
-    <div className="dashboard">
-      <Header name={name} picture={picture} />
-      <div className="dashboard-layout">
-        <Sidebar />
-        <main className="main-content">
-          <h1>Event types</h1>
-          
-          <CreateEventButton onClick={toggleForm} />
-          <EventForm isFormVisible={isFormVisible} email={email} toggleForm={toggleForm} fetchEvents={fetchEvents}/>
 
-          {events.map((event, index) => (
-              <EventCard
-                key={index}
-                email={email}
-                id={event.id}
-                title={event.title}
-                duration={event.duration.hours}
-                location={event.location}
-                fetchEvents={fetchEvents}
-              />
-            ))}
-        </main>
+      <div className="dashboard">
+        <Header name={name} picture={picture} />
+        <div className="dashboard-layout">
+          <Sidebar email={email} />
+
+          <div className="main-content">
+          <Routes>
+            <Route path="events/:email" element={<EventsDashboard />} />
+            <Route path="appointments/:email" element={<AppointmentsDashboard />} />
+          </Routes>        
+          </div>
+        </div>
       </div>
-    </div>
   );
 }
