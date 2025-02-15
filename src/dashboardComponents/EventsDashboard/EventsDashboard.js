@@ -3,10 +3,10 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import '../../createEventComponents/NewEventForm.css'
-import EventCard from '../EventCard'; // Correct path based on your structure
-import EventForm from '../../updateEvents/UpdateEventForm'; // Assuming this is the form component
-import CreateEventButton from '../../createEventComponents/CreateEventButton'; // Adjusted path
-import './EventsDashboard.css'; // Path seems correct
+import EventCard from '../EventCard'; 
+import EventForm from '../../createEventComponents/EventForm'
+import CreateEventButton from '../../createEventComponents/CreateEventButton'; 
+import './EventsDashboard.css';
 
 
 export default function EventsDashboard() {
@@ -46,7 +46,11 @@ export default function EventsDashboard() {
             email={email}
             id={event.id}
             title={event.title}
-            duration={event.duration.hours}
+            duration={
+              `${event.duration.hours ? event.duration.hours + 'h ' : ''}${
+                event.duration.minutes ? event.duration.minutes + 'm' : ''
+              }`.trim() || "No duration"
+            }
             location={event.location}
             fetchEvents={fetchEvents}
             />
