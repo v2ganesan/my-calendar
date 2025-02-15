@@ -137,17 +137,19 @@ router.get('/eventName/:id', async (req, res) => {
         const { id } = req.params;
         const event = await Event.findOne({
             where: { id },
-            attributes: ['title'],
+            attributes: ['title', 'duration'],
             raw: true,
         });
-        console.log('found event')
+        //console.log('found event', event);
 
         if (!event) {
             return res.status(404).json({ message: 'Event not found' });
         }
 
         console.log('name', event.title);
-        res.json({ title: event.title });
+        console.log('duration:', event.duration.hours);
+        const duration = (event.duration?.hours ?? 0) + ((event.duration?.minutes ?? 0) / 60)
+        res.json({ title: event.title , duration: duration});
     } catch (error) {
         console.error('Error fetching event name:', error);
         res.status(500).json({ message: 'Internal Server Error' });
